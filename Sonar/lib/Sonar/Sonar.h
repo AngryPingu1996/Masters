@@ -5,7 +5,7 @@
 #define rx3 16
 #define txFreq 40e3
 #define txPin 18
-#define clkFreq 2.05e6
+#define clkFreq 45e3*50
 #define clkPin 19
 #define ledpin 13
 ADC *adc = new ADC();
