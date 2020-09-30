@@ -4,13 +4,11 @@
 
 IntervalTimer timer;
 int counter=0;
-int t=1;
+int t=0;
 int fs=200e3;
-int ts=1/fs;
-int numsamples = t/fs;
+int numsamples = 0;
 
 void ADC_sample(){
-  
   if (counter<=numsamples){
     counter++;
     adc_sample();
@@ -34,11 +32,11 @@ void setup() {
 void loop() {
   if (Serial.available()) {
     char incomingByte = Serial.read();
-    if (incomingByte=='s'){
-      digitalWrite(ledpin, HIGH);
-      Serial.flush();
-      startTX();
-      timer.begin(ADC_sample,ts);
-    }
+    t=atoi(&incomingByte);
+    numsamples = t*fs;
+    digitalWrite(ledpin, HIGH);
+    Serial.flush();
+    startTX();
+    timer.begin(ADC_sample,5);
   }
 }
