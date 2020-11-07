@@ -24,7 +24,7 @@ void setup_adc(){
 void adc_sample(){
     uint16_t samples[3] = {(uint16_t)adc->analogRead(rx1), (uint16_t)adc->analogRead(rx2), (uint16_t)adc->analogRead(rx3)};
     uint8_t bytes[6];
-    memcpy(bytes, samples, sizeof(bytes));
+    memcpy(bytes, samples, sizeof(bytes)); //convert 16-bit values to 2 8-bit values
     Serial.write(bytes,6);
 }
 

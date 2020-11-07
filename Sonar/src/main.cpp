@@ -16,8 +16,8 @@ void ADC_sample(){
   else{
     digitalWrite(ledpin, LOW);
     counter=0;
-    timer.end();
     stopTX();
+    timer.end();
   }
 }
 
@@ -27,6 +27,7 @@ void setup() {
   Serial.begin(480e6);
   Serial.clear();
   pinMode(ledpin, OUTPUT);
+  
 }
 
 void loop() {
