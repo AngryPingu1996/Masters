@@ -1,10 +1,11 @@
-load recordings_right;          %load saved data
+load recordings_R_no_rot;
+
 X_post_lstm={};                 %empty array for the training data the LSTM network
 X_post_cnn=[];                  %empty array for the training data for the CNN
 fs=200e3/15;                    %sampling frequency after down sampling
 fc=40e3;                        %centre frequency
 l2 = (343/fc)/2;                %factor to convert from frequency to velocity
-for k=1:length(X_bb)
+for k=1:length(Y)
     bbf1_ = X_bb{k,1}(1,:);
     bbf2_ = X_bb{k,1}(2,:);
     bbf3_ = X_bb{k,1}(3,:);
@@ -35,9 +36,14 @@ for k=1:length(X_bb)
     diff2=dv1-dv3;
     diff3=dv2-dv3;
     
+    X_post_lstm{k,1}=[dv1;dv2;dv3;diff1;diff2;diff3];            %data layout for LSTM
     
-    X_post{k,1}=[dv1;dv2;dv3;diff1;diff2;diff3];            %data layout for LSTM
-    X_post_cnn(1,:,:,k)=[dv1;dv2;dv3;diff1;diff2;diff3]';   %data layout for CNN
+    %data layout for CNN
+    if(Y(k)=="in"||Y(k)=="out"||Y(k)=="up"||Y(k)=="down"||Y(k)=="left"||Y(k)=="right")
+        X_post_cnn(1,:,:,k)=[dv1,zeros(1,205);dv2,zeros(1,205);dv3,zeros(1,205);diff1,zeros(1,205);diff2,zeros(1,205);diff3,zeros(1,205)]';   %data layout for CNN
+    else
+        X_post_cnn(1,:,:,k)=[dv1;dv2;dv3;diff1;diff2;diff3]';
+    end
 end
-%save data
-save('data_right.mat','X_post','X_post_cnn','Y');
+%save data set
+save('data.mat','X_post_lstm','X_post_cnn','Y','Y_lr');

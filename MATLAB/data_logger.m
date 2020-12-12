@@ -12,10 +12,9 @@ bw=w0/1000;
 [b,a]=iirnotch(w0,bw);
 
 %loop for the amount of gestures to record in one session
-num_recording = 25;
-for k=1:num_recording
-    pause(1);
-    
+num_recording = 100;
+for k=1:num_recording    
+    pause(0.5);
     %serial port configuration
     s=serialport('COM6',480e6);
     flush(s);
@@ -40,9 +39,9 @@ for k=1:num_recording
     bb3=nf3.*exp(-1j*2*pi*fc*t);
     
     %baseband filtering
-    bbf1=filter(Num,1,bb);
-    bbf2=filter(Num,1,bb);
-    bbf3=filter(Num,1,bb);
+    bbf1=filter(Num,1,bb1);
+    bbf2=filter(Num,1,bb2);
+    bbf3=filter(Num,1,bb3);
     
     %downsampling
     ds=15;
@@ -53,10 +52,8 @@ for k=1:num_recording
     %save recordings
     X_bb{end+1,1}=[bbf1_ds;bbf2_ds;bbf3_ds];
     Y(end+1,1) = 'down';
-    
+    Y_lr(end+1,1) = 'down_R';
     disp(k);
 end
-% 
-% X_bb={};
-% Y = categorical();
-% save('recordings_right.mat','X_bb','Y');
+% save data set
+save('recordings.mat','X_bb','Y','Y_lr');
